@@ -9,6 +9,8 @@ namespace FuelBe.Database {
         public virtual DbSet<Models.Vehicle> Vehicles => Set<Models.Vehicle>();
         public virtual DbSet<Models.Reservation> Reservations => Set<Models.Reservation>();
         public virtual DbSet<Models.Refueling> Refuelings => Set<Models.Refueling>();
+        public virtual DbSet<Models.Role> Roles => Set<Models.Role>();
+        public virtual DbSet<Models.UserRole> UsersRoles => Set<Models.UserRole>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +30,11 @@ namespace FuelBe.Database {
               .WithOne(x => x.User)
               .HasPrincipalKey(x => x.Id)
               .HasForeignKey(x => x.UserId);
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.UsersRoles)
+                .WithOne(x => x.User)
+                .HasPrincipalKey(x => x.Id)
+                .HasForeignKey(x => x.UserId);
             //---------------------------------------------------------------------
             //Vehicle
             modelBuilder.Entity<Vehicle>()
@@ -47,8 +54,22 @@ namespace FuelBe.Database {
             modelBuilder.Entity<Reservation>()
                 .HasKey(x => x.Id);
             //--------------------------------------------------------------------------
+            //Refueling
             modelBuilder.Entity<Refueling>()
                 .HasKey(x => x.Id);
+            //--------------------------------------------------------------------------
+            //Role
+            modelBuilder.Entity<Role>()
+                .HasKey(x => x.Id);
+            modelBuilder.Entity<Role>()
+                .HasMany(x => x.UsersRoles)
+                .WithOne(x => x.Role)
+                .HasPrincipalKey(x => x.Id)
+                .HasForeignKey(x => x.RoleId);
+            //-------------------------------------------------------------------
+            //UserRole
+            modelBuilder.Entity<UserRole>()
+                .HasKey(x => new { x.RoleId, x.UserId });
         }
 
     }

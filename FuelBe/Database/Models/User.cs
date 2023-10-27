@@ -18,5 +18,6 @@ namespace FuelBe.Database.Models {
         //-----------------------------
         public IEnumerable<Reservation>? Reservations { get; set; }
         public IEnumerable<Refueling>? Refuelings { get; set; }
+        public IEnumerable<UserRole>? UsersRoles { get; set; }
     }
 }

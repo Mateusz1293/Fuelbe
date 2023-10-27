@@ -2226,19 +2226,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\mati\\.nuget\\packages\\": {}
+    "C:\\Users\\Gabrysia\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\mati\\Reservation_app\\Nowy folder\\FuelBe\\FuelBe\\FuelBe.csproj",
+      "projectUniqueName": "C:\\Users\\Gabrysia\\Desktop\\Fuelbe\\FuelBe\\FuelBe.csproj",
       "projectName": "FuelBe",
-      "projectPath": "E:\\mati\\Reservation_app\\Nowy folder\\FuelBe\\FuelBe\\FuelBe.csproj",
-      "packagesPath": "C:\\Users\\mati\\.nuget\\packages\\",
-      "outputPath": "E:\\mati\\Reservation_app\\Nowy folder\\FuelBe\\FuelBe\\obj\\",
+      "projectPath": "C:\\Users\\Gabrysia\\Desktop\\Fuelbe\\FuelBe\\FuelBe.csproj",
+      "packagesPath": "C:\\Users\\Gabrysia\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Gabrysia\\Desktop\\Fuelbe\\FuelBe\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\mati\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Gabrysia\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2246,7 +2251,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -2303,7 +2307,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }
