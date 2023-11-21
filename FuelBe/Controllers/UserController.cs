@@ -22,8 +22,16 @@ namespace FuelBe.Controllers
             return Ok();
         }
 
+        [HttpGet("admin")]
+        public IActionResult IsAdmin() {
+            return Ok(userResolver.IsAdmin);
+        }
+
         [HttpGet("info")]
         public ActionResult<Database.Models.User> GetUser() {
+            //test
+            var getisAdmin = userResolver.IsAdmin;
+            //
             var findUser = dbContext.Users.Where(x => x.Id == userResolver.getId()).FirstOrDefault();
             if (findUser == null) {
                 throw new Exception("Nie ma usera");
@@ -31,29 +39,9 @@ namespace FuelBe.Controllers
             return Ok(findUser);
         }
 
-        //[HttpPost("login")]
-        //public ActionResult<object> Login(LoginDto loginDto) {
-        //    var findByLogin = dbContext.Users.Where(x => x.Login == loginDto.Login).FirstOrDefault();
-        //    if (findByLogin == null) {
-        //        throw new Exception("Użytkownik nie istnieje w bazie");
-        //    }
-        //    if (findByLogin.Password != loginDto.Password) {
-        //        throw new Exception("Hasło jest niepopranwe");
-        //    }
-        //    userResolver.setId(findByLogin.Id);
-        //    return Ok(new { token = findByLogin.Id });
-        //}
-
         [HttpGet("users")]
         public ActionResult<IEnumerable<Database.Models.User>> GetAll() {
             return dbContext.Users.ToList();
         }
-
-        ////--------------------------------------obiekty
-        //public class LoginDto
-        //{
-        //    public string Login { get; set; } = string.Empty;
-        //    public string Password { get; set; } = string.Empty;
-        //}
     }
 }

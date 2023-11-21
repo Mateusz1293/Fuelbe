@@ -21,13 +21,14 @@ namespace FuelBe.Controllers {
 
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync(LoginDto loginDto) {
+            bool isAdmin = false;
             //znajdź żytkownika o takim loginie i haśle
             var findByLogin = dbContext.Users.Where(x => x.Login == loginDto.Login).FirstOrDefault();
             if (findByLogin == null) {
-                throw new Exception("Użytkownik nie istnieje w bazie");
+                return Ok(new AuthMessage() { Status = 404, Message = "Użytkownik nie istnieje", IsAdmin = false});
             }
             if (findByLogin.Password != loginDto.Password) {
-                throw new Exception("Hasło jest niepopranwe");
+                return Ok(new AuthMessage() { Status = 404, Message = "Hasło jest niepopranwe", IsAdmin = false });
             }
             //jeśli użytkownik istnieje znajdź jego role
             var getRole = dbContext.UsersRoles
@@ -44,6 +45,9 @@ namespace FuelBe.Controllers {
             getRole.ForEach(x => {
                 if (x.Role != null) {
                     claims.Add(new Claim(ClaimTypes.Role, x.Role.Name));
+                    if (x.Role.Name == "ADMIN") {
+                        isAdmin = true;
+                    }
                 }
             });
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -54,7 +58,7 @@ namespace FuelBe.Controllers {
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
                 new AuthenticationProperties { IsPersistent = true });
-            return Ok(claims);
+            return Ok(new AuthMessage() { Status = 200, Message = "Zalogowano!", IsAdmin = isAdmin });
         }
 
         [HttpGet("logout")]
@@ -72,6 +76,12 @@ namespace FuelBe.Controllers {
         {
             public string Login { get; set; } = string.Empty;
             public string Password { get; set; } = string.Empty;
+        }
+
+        public class AuthMessage {
+            public int? Status { get; set; }
+            public string? Message { get; set; }
+            public bool? IsAdmin { get; set; }
         }
     }
 }
