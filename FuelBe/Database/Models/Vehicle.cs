@@ -19,6 +19,12 @@ namespace FuelBe.Database.Models {
         public int ProductionYear { get; set; }
         [Column("fuel_type")]
         public string FuelType { get; set; } = string.Empty;
+        [Column("insurance_to")]
+        public DateTime InsuranceTo { get; set; }
+        [Column("inspection_to")]
+        public DateTime InspectionTo { get; set; }
+        [Column("tires_type")]
+        public string TiresType { get; set; } = string.Empty;
         //-----------------------------
         public IEnumerable<Reservation>? Reservations { get; set; }
         public IEnumerable<Refueling>? Refuelings { get; set; }

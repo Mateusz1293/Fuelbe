@@ -3,15 +3,15 @@ using System.Security.Claims;
 
 namespace FuelBe.Services {
     public class UserResolver : IUserResolver {
-        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly HttpContext httpContextAccessor;
 
         public UserResolver(IHttpContextAccessor httpContextAccessor) {
-                this.httpContextAccessor = httpContextAccessor;
+                this.httpContextAccessor = httpContextAccessor.HttpContext;
         }
 
         public int Id {
             get {
-                var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+                var userId = httpContextAccessor.User.FindFirst(ClaimTypes.NameIdentifier);
                 if (userId != null) {
                     return Convert.ToInt32(userId.Value);
                 }
@@ -21,7 +21,7 @@ namespace FuelBe.Services {
 
         public bool IsAdmin {
             get {
-                var isA = httpContextAccessor.HttpContext.User.FindAll(ClaimTypes.Role);
+                var isA = httpContextAccessor.User.FindAll(ClaimTypes.Role);
                 bool isAdmin = false;
                 isA.ToList().ForEach(x => {
                     if (x.Value == "ADMIN") {

@@ -28,13 +28,10 @@ namespace FuelBe.Controllers
         }
 
         [HttpGet("info")]
-        public ActionResult<Database.Models.User> GetUser() {
-            //test
-            var getisAdmin = userResolver.IsAdmin;
-            //
-            var findUser = dbContext.Users.Where(x => x.Id == userResolver.getId()).FirstOrDefault();
+        public ActionResult<Database.Models.User> GetUser(int id) {
+            var findUser = dbContext.Users.Where(x => x.Id == id).FirstOrDefault();
             if (findUser == null) {
-                throw new Exception("Nie ma usera");
+                //TODO
             }
             return Ok(findUser);
         }

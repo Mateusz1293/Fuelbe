@@ -1,7 +1,11 @@
+using FuelBe;
 using FuelBe.Database;
 using FuelBe.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<IUserResolver, UserResolver>();
+builder.Services.AddScoped<IUserResolver, UserResolver>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddDbContext<ReservationDbContext>(options => {
@@ -24,11 +28,26 @@ builder.Services.AddDbContext<ReservationDbContext>(options => {
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-        .AddCookie(options =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(opts =>
+    {
+        //convert the string signing key to byte array
+        byte[] signingKeyBytes = Encoding.UTF8
+            .GetBytes("this is my custom Secret key for authentication");
+
+        opts.TokenValidationParameters = new TokenValidationParameters
         {
-            // options.LoginPath = "/Account/Login";
-        });
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "https://localhost:7295",
+            ValidAudience = "https://localhost:7295",
+            IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 

@@ -204,3 +204,5 @@ C:\Users\Gabrysia\Desktop\Fuelbe\FuelBe\obj\Debug\net6.0\refint\FuelBe.dll
 C:\Users\Gabrysia\Desktop\Fuelbe\FuelBe\obj\Debug\net6.0\FuelBe.pdb
 C:\Users\Gabrysia\Desktop\Fuelbe\FuelBe\obj\Debug\net6.0\FuelBe.genruntimeconfig.cache
 C:\Users\Gabrysia\Desktop\Fuelbe\FuelBe\obj\Debug\net6.0\ref\FuelBe.dll
+C:\Users\Gabrysia\Desktop\Fuelbe\FuelBe\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Gabrysia\Desktop\Fuelbe\FuelBe\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
