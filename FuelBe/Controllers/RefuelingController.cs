@@ -12,6 +12,15 @@ namespace FuelBe.Controllers {
             this.dbContext = dbContext;
         }
 
+        [HttpGet("get-actual-counter-status")]
+        public decimal GetActualCounterStatus(int carId) {
+            var data = dbContext.Refuelings
+                .Where(x => x.VehicleId == carId)
+                .OrderByDescending(x => x.AddDate)
+                .ToList();
+            return data.Count > 0 ? data.First().CounterStatus : 0M;
+        }
+
         [HttpPost("add-refueling")]
         public void AddRefueling(Refueling refueling) {
             refueling.AddDate = DateTime.Now;
