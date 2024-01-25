@@ -50,5 +50,35 @@ namespace FuelBe.Controllers {
             }
             return Ok(getCar);
         }
+
+        [HttpPut("update")]
+        public IActionResult UpdateVehicle(Database.Models.Vehicle vehicle) {
+            var getVehicle = dbContext.Vehicles.Where(x => x.Id == vehicle.Id).FirstOrDefault();
+            if (getVehicle != null) {
+                getVehicle.Model = vehicle.Model;
+                getVehicle.RegisterNumber = vehicle.RegisterNumber;
+                getVehicle.Vin = vehicle.Vin;
+                getVehicle.ProductionYear = vehicle.ProductionYear;
+                getVehicle.VehicleType = vehicle.VehicleType;
+                getVehicle.FuelType = vehicle.FuelType;
+                getVehicle.Gearbox = vehicle.Gearbox;
+                getVehicle.TiresType = vehicle.TiresType;
+                getVehicle.InsuranceTo = vehicle.InsuranceTo;
+                getVehicle.InspectionTo = vehicle.InspectionTo;
+                dbContext.Vehicles.Update(getVehicle);
+                dbContext.SaveChanges();
+            }
+            return Ok();
+        }
+
+        [HttpDelete("delete")]
+        public ActionResult DeleteVehicle(int vehicleId) {
+            var findVehicle = dbContext.Vehicles.Where(x => x.Id == vehicleId).FirstOrDefault();
+            if (findVehicle != null) {
+                dbContext.Vehicles.Remove(findVehicle);
+                dbContext.SaveChanges();
+            }
+            return Ok();
+        }
     }
 }

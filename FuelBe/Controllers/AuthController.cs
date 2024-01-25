@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography;
 
 namespace FuelBe.Controllers {
     [Route("api/auth")]
@@ -26,6 +27,34 @@ namespace FuelBe.Controllers {
             this.userResolver = userResolver;
         }
 
+        [HttpGet("testHash")]
+        public IActionResult HashPass(string password = "test1234") {
+            byte[] salt;
+            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000);
+            byte[] hash = pbkdf2.GetBytes(20);
+            byte[] hashBytes = new byte[36];
+            Array.Copy(salt, 0, hashBytes, 0, 16);
+            Array.Copy(hash, 0, hashBytes, 16, 20);
+            string savedPasswordHash = Convert.ToBase64String(hashBytes);
+            //---------------------------------
+            /* Fetch the stored value */
+            string savedPasswordHash2 = savedPasswordHash;
+            /* Extract the bytes */
+            byte[] hashBytes2 = Convert.FromBase64String(savedPasswordHash2);
+            /* Get the salt */
+            byte[] salt2 = new byte[16];
+            Array.Copy(hashBytes2, 0, salt2, 0, 16);
+            /* Compute the hash on the password the user entered */
+            var pbkdf22 = new Rfc2898DeriveBytes(password, salt2, 100000);
+            byte[] hash2 = pbkdf22.GetBytes(20);
+            /* Compare the results */
+            for (int i = 0; i < 20; i++)
+                if (hashBytes2[i + 16] != hash2[i])
+                    throw new UnauthorizedAccessException();
+            return Ok();
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync(LoginDto loginDto) {
             bool isAdmin = false;
@@ -34,8 +63,16 @@ namespace FuelBe.Controllers {
             if (findByLogin == null) {
                 return Ok(new AuthMessage() { Status = 404, Message = "Użytkownik nie istnieje", IsAdmin = false});
             }
-            if (findByLogin.Password != loginDto.Password) {
-                return Ok(new AuthMessage() { Status = 404, Message = "Hasło jest niepopranwe", IsAdmin = false });
+            string savedPasswordHash = findByLogin.Password;
+            byte[] hashBytes = Convert.FromBase64String(savedPasswordHash);
+            byte[] salt = new byte[16];
+            Array.Copy(hashBytes, 0, salt, 0, 16);
+            var pbkdf2 = new Rfc2898DeriveBytes(loginDto.Password, salt, 100000);
+            byte[] hash = pbkdf2.GetBytes(20);
+            for (int i = 0; i < 20; i++) {
+                if (hashBytes[i + 16] != hash[i]) {
+                    return Ok(new AuthMessage() { Status = 404, Message = "Hasło jest niepopranwe", IsAdmin = false });
+                }
             }
             //jeśli użytkownik istnieje znajdź jego role
             var getRole = dbContext.UsersRoles

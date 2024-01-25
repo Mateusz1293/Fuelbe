@@ -39,19 +39,21 @@ namespace FuelBe.Controllers {
         }
 
         [HttpGet("getUserCar")]
-        public ActionResult<List<Reservation>> GetUserCar(int userId) {
+        public ActionResult<List<object>> GetUserCar(int userId) {
             var getReservations =  dbContext.Reservations
                 .Where(x => x.UserId == userId && (x.DateFrom <= DateTime.Now && x.DateTo >= DateTime.Now))
                 .ToList();
-            List<Vehicle> cars = new List<Vehicle>();
+            List<object> cars = new List<object>();
             getReservations.ForEach(x => {
                 var getCar = dbContext.Vehicles.Where(xs => xs.Id == x.VehicleId).FirstOrDefault();
+                var getDays = (x.DateTo - x.DateFrom).TotalDays;
                 if (getCar != null) {
-                    cars.Add(new Vehicle
+                    cars.Add(new 
                     {
                         Id = getCar.Id,
                         Model = getCar.Model,
                         RegisterNumber = getCar.RegisterNumber,
+                        TotalDays = getDays
                     });
                 }
             });
